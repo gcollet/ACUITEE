@@ -43,7 +43,10 @@ def verify_token(token):
     '''Takes the token in the url and returns a index page with the note loaded (identity validates the token)'''
     identity = decode_token(token)
     session['sourceid'] = identity['sub']['sourceId']
-    return render_template("index.html", note_text=identity['sub']['note'])
+    note_text = ''
+    with open(identity['sub']['note'], "r") as fh:
+        note_text = fh.read()
+    return render_template("index.html", note_text=note_text)
 
 @app.route("/note/savejson",methods=['POST'])
 def SaveJson():
